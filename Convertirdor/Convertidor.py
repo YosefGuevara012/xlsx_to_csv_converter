@@ -28,38 +28,38 @@ filename_text.set("Archivo no seleccionado")
 mydestinaton_File = StringVar()
 
 #Funtions Definition
+
+## Function for the select button
 def select():
     # this funtion get the path of the source file
-    global filename, filename_text
+    global filename
     root.filename =  filedialog.askopenfilename(initialdir = "/Escritorio",title = "Seleccione el archivo", filetypes = (("Archivos xlsx","*.xlsx"),("Todos los archivos","*.*")))
-    filename = root.filename
-    filename_text.set(os.path.abspath(filename))
 
+    if not root.filename:
+        filename_text.set("Archivo no seleccionado")
+        mydestinaton_File.set("")
+    else:
+        filename = root.filename
+        filename_text.set(os.path.abspath(filename))
 
+## Function for the convert button
 def convert():
     # this funtion converts the file
-    global directory
-    # Get the path of the file
-
-    path = os.path.abspath(filename)
-    directory, file = os.path.split(path)
-
-    # set the working directory using the path of the file
-
-    os.chdir(directory)
-
-    # File convertion
-
-    df = pd.read_excel(root.filename) # File reading
-
-    csv_File = file[:-5] # Gets the name of the file
-
-    df.to_csv(csv_File + '.csv', index=False) #  Creates the name of the file
-    
-    mydestinaton_File.set(directory + "\\" + csv_File + '.csv')
-
-    messagebox.showinfo( "Mensaje", "Archivo " + csv_File + ".csv" +" generado correctamente." )
-
+ 
+    try:
+        # Get the path of the file
+        path = os.path.abspath(filename)
+        directory, file = os.path.split(path)
+        # set the working directory using the path of the file
+        os.chdir(directory)
+        # File convertion
+        df = pd.read_excel(root.filename) # File reading
+        csv_File = file[:-5] # Gets the name of the file
+        df.to_csv(csv_File + '.csv', index=False) #  Creates the name of the file
+        mydestinaton_File.set(directory + "\\" + csv_File + '.csv')
+        messagebox.showinfo( "Mensaje", "El archivo " + csv_File + ".csv" +" se ha generado correctamente." )
+    except:
+        messagebox.showinfo("Error", "Aún no ha seleccionado ningún archivo." )    
 
 
 # image settings
