@@ -6,18 +6,26 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 
+# Global variables
+
+x_pad=10
+y_pad=5
+btn_h_size=1
+btn_w_size=10
+
 # window settings
 
 root = Tk()
-root.title('Conversor de archivos de importación.')
-root.config(width="380", height="320")
-#root.resizable(False,False)
+root.title('Conversor .xlsx a .csv')
+root.geometry("320x200")
+root.resizable(False, False)
 
-# Frame settings
-
-#File selection
+#Funtions Definition
 def open():
+    # this funtion get the path of the source file
+
     root.filename =  filedialog.askopenfilename(initialdir = "/Escritorio",title = "Seleccione el archivo", filetypes = (("Archivos xlsx","*.xlsx"),("Todos los archivos","*.*")))
+    
     # Get the path of the file
 
     path = os.path.abspath(root.filename)
@@ -37,16 +45,31 @@ def open():
 
     messagebox.showinfo( "Mensaje", "Archivo " + csv_File + ".csv" +" generado correctamente." )
     
-# frame content
+# image settings
+
 image = PhotoImage(file="reference_image.png")
 imageLabel = Label(root, image=image)
-imageLabel.pack()
-imageLabel.place(x=100, y=100)
+imageLabel.grid(row="0", column="0", padx=15, pady=y_pad, columnspan=2)
+
+# Buttons settings
+
+## Select button
 instructionLabel = Label(root, text="Seleccione el archivo a convertir.")
-instructionLabel.pack()
-instructionLabel.place(x=20, y=100)
-select_btn = Button(root, text="Seleccionar", command=open)# Selecction button
-select_btn.pack()
+instructionLabel.grid(row="1", column="0", sticky="e", padx=x_pad, pady=y_pad)
+select_btn = Button(root, text="Seleccionar", height=btn_h_size, width=btn_w_size, command=open)
+select_btn.grid(row="1", column="1", padx=x_pad, pady=y_pad)
+
+## Orign path label
+
+originPathLabel = Label(root, text="C/sasdaafsasfxxxxxxxxxxxxxxxxxxxx")
+originPathLabel.grid(row="2",column="0", sticky="e",padx=x_pad, pady=y_pad)
+convertion_btn = Button(root, text="Convertir", height=btn_h_size, width=btn_w_size)
+convertion_btn.grid(row="2",column="1",padx=x_pad, pady=y_pad)
+
+## Destination path label
+originPathLabel = Label(root, text="C/sasdaafsasfxxxxxxxxxxxxxxxxxxxx")
+originPathLabel.grid(row="3",column="0",padx=x_pad, pady=y_pad, columnspan=2)
+
 
 root.mainloop()  # Keeps the window open until the window is closed
 
