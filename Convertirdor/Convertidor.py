@@ -17,18 +17,31 @@ btn_w_size=10
 
 root = Tk()
 root.title('Conversor .xlsx a .csv')
-root.geometry("320x200")
+#root.geometry("320x200")
 root.resizable(False, False)
 
-#Funtions Definition
-def open():
-    # this funtion get the path of the source file
+# global path variables
 
+filename=""
+filename_text = StringVar()
+filename_text.set("Archivo no seleccionado")
+mydestinaton_File = StringVar()
+
+#Funtions Definition
+def select():
+    # this funtion get the path of the source file
+    global filename, filename_text
     root.filename =  filedialog.askopenfilename(initialdir = "/Escritorio",title = "Seleccione el archivo", filetypes = (("Archivos xlsx","*.xlsx"),("Todos los archivos","*.*")))
-    
+    filename = root.filename
+    filename_text.set(os.path.abspath(filename))
+
+
+def convert():
+    # this funtion converts the file
+    global directory
     # Get the path of the file
 
-    path = os.path.abspath(root.filename)
+    path = os.path.abspath(filename)
     directory, file = os.path.split(path)
 
     # set the working directory using the path of the file
@@ -42,9 +55,13 @@ def open():
     csv_File = file[:-5] # Gets the name of the file
 
     df.to_csv(csv_File + '.csv', index=False) #  Creates the name of the file
+    
+    mydestinaton_File.set(directory + "\\" + csv_File + '.csv')
 
     messagebox.showinfo( "Mensaje", "Archivo " + csv_File + ".csv" +" generado correctamente." )
-    
+
+
+
 # image settings
 
 image = PhotoImage(file="reference_image.png")
@@ -56,22 +73,23 @@ imageLabel.grid(row="0", column="0", padx=15, pady=y_pad, columnspan=2)
 ## Select button
 instructionLabel = Label(root, text="Seleccione el archivo a convertir.")
 instructionLabel.grid(row="1", column="0", sticky="e", padx=x_pad, pady=y_pad)
-select_btn = Button(root, text="Seleccionar", height=btn_h_size, width=btn_w_size, command=open)
+select_btn = Button(root, text="Seleccionar", height=btn_h_size, width=btn_w_size, command=select)
 select_btn.grid(row="1", column="1", padx=x_pad, pady=y_pad)
 
 ## Orign path label
 
-originPathLabel = Label(root, text="C/sasdaafsasfxxxxxxxxxxxxxxxxxxxx")
-originPathLabel.grid(row="2",column="0", sticky="e",padx=x_pad, pady=y_pad)
-convertion_btn = Button(root, text="Convertir", height=btn_h_size, width=btn_w_size)
+sourcePathLabel = Label(root, textvariable=filename_text)
+sourcePathLabel.grid(row="2",column="0", sticky="e",padx=x_pad, pady=y_pad)
+convertion_btn = Button(root, text="Convertir", height=btn_h_size, width=btn_w_size, command=convert)
 convertion_btn.grid(row="2",column="1",padx=x_pad, pady=y_pad)
 
 ## Destination path label
-originPathLabel = Label(root, text="C/sasdaafsasfxxxxxxxxxxxxxxxxxxxx")
-originPathLabel.grid(row="3",column="0",padx=x_pad, pady=y_pad, columnspan=2)
+destinationPathLabel = Label(root, textvariable=mydestinaton_File)
+destinationPathLabel.grid(row="3",column="0",padx=x_pad, pady=y_pad, columnspan=2)
 
 
-root.mainloop()  # Keeps the window open until the window is closed
+# Keeps the window open until the window is closed
+root.mainloop()  
 
 # Icons attribution
 """ 
